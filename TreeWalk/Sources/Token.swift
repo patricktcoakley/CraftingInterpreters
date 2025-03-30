@@ -1,4 +1,28 @@
-enum TokenType: CustomStringConvertible {
+public enum Literal: Equatable, CustomStringConvertible {
+  case string(String)
+  case number(Float64)
+  case boolean(Bool)
+  case identifier(String)
+  case `nil`
+
+  public var description: String {
+    return switch self {
+    case .string(let value): "\"\(value)\""
+    case .number(let value):
+      // String representation as Int if possible
+      if let anInt = Int(exactly: value) {
+        String(anInt)
+      } else {
+        String(value)
+      }
+    case .boolean(let value): value ? "true" : "false"
+    case .identifier(let value): value
+    case .nil: "nil"
+    }
+  }
+}
+
+public enum TokenType: CustomStringConvertible {
   // Punctuation
   case leftParen, rightParen, leftBrace, rightBrace
   case comma, dot, semicolon
@@ -8,22 +32,19 @@ enum TokenType: CustomStringConvertible {
   case bang, bangEqual, equal, equalEqual
   case greater, greaterEqual, less, lessEqual
 
-  // Literals
-  case identifier(String)
-  case string(String)
-  case number(Float64)
+  // Literal
+  case literal(Literal)
 
   // Keywords
   case and, `class`, `else`, `false`, fun, `for`, `if`
-  case `nil`, or, print, `return`, `super`, this
+  case or, print, `return`, `super`, this
   case `true`, `var`, `while`
 
   case eof
 
-  var description: String {
+  public var description: String {
     switch self {
-    case .identifier(let value), .string(let value): value
-    case .number(let value): String(value)
+    case .literal(let value): value.description
     case .leftParen: "("
     case .rightParen: ")"
     case .leftBrace: "{"
@@ -50,7 +71,6 @@ enum TokenType: CustomStringConvertible {
     case .fun: "fun"
     case .for: "for"
     case .if: "if"
-    case .nil: "nil"
     case .or: "or"
     case .print: "print"
     case .return: "return"
@@ -64,13 +84,18 @@ enum TokenType: CustomStringConvertible {
   }
 }
 
-struct Token: CustomStringConvertible {
-  let type: TokenType
-  let line: Int
+public struct Token: CustomStringConvertible {
+  public let type: TokenType
+  public let line: Int
 
-  var description: String {
+  public init(type: TokenType, line: Int) {
+    self.type = type
+    self.line = line
+  }
+
+  public var description: String {
     switch type {
-    case .identifier, .string, .number: type.description
+    case .literal: type.description
     default: type.description.uppercased()
     }
   }

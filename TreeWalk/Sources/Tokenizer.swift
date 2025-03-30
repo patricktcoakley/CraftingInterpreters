@@ -73,7 +73,7 @@ class Tokenizer {
       if char.isNumber {
         try handleNumber()
       } else if char.isLetter {
-        try handleIdentifier()
+        try handleKeywordOrIdentifier()
       } else {
         throw LoxError.syntax(line: line, where: "scan", message: "Unexpected character \(char).")
       }
@@ -107,7 +107,7 @@ class Tokenizer {
 
     let stringStartIndex = source.index(after: startIndex)
     let value = String(source[stringStartIndex ..< source.index(before: currentIndex)])
-    addToken(.string(value))
+    addToken(.literal(.string(value)))
   }
 
   private func handleNumber() throws(LoxError) {
@@ -126,10 +126,10 @@ class Tokenizer {
       throw LoxError.syntax(line: line, where: "number", message: "Invalid number.")
     }
 
-    addToken(.number(num))
+    addToken(.literal(.number(num)))
   }
 
-  private func handleIdentifier() throws(LoxError) {
+  private func handleKeywordOrIdentifier() throws(LoxError) {
     while peek.isLetter || peek.isNumber {
       _ = advance()
     }
@@ -142,7 +142,7 @@ class Tokenizer {
     }
 
     // Fallback to identifier if keyword doesn't exist
-    let type = handleKeyword(text) ?? .identifier(text)
+    let type = handleKeyword(text) ?? .literal(.identifier(text))
 
     addToken(type)
   }
@@ -156,7 +156,7 @@ class Tokenizer {
     case "for": .for
     case "fun": .fun
     case "if": .if
-    case "nil": .nil
+    case "nil": .literal(.nil)
     case "or": .or
     case "print": .print
     case "return": .return
