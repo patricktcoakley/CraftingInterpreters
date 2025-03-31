@@ -1,4 +1,4 @@
-class Tokenizer {
+public class Tokenizer {
   let source: String
 
   private var tokens: [Token] = []
@@ -6,13 +6,13 @@ class Tokenizer {
   private var currentIndex: String.Index
   private var line = 1
 
-  init(_ source: String) {
+  public init(_ source: String) {
     self.source = source
     self.startIndex = source.startIndex
     self.currentIndex = source.startIndex
   }
 
-  func tokenize() throws(LoxError) -> [Token] {
+  public func tokenize() throws(LoxError) -> [Token] {
     while !isAtEnd {
       startIndex = currentIndex
       try scan()
@@ -72,7 +72,7 @@ class Tokenizer {
     default:
       if char.isNumber {
         try handleNumber()
-      } else if char.isLetter {
+      } else if char.isLetter || char == "_" {
         try handleKeywordOrIdentifier()
       } else {
         throw LoxError.syntax(line: line, where: "scan", message: "Unexpected character \(char).")
@@ -130,7 +130,7 @@ class Tokenizer {
   }
 
   private func handleKeywordOrIdentifier() throws(LoxError) {
-    while peek.isLetter || peek.isNumber {
+    while peek.isLetter || peek.isNumber || peek == "_" {
       _ = advance()
     }
 

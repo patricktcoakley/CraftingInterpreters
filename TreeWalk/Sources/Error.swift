@@ -1,6 +1,6 @@
 import ArgumentParser
 
-enum LoxError: Error, CustomStringConvertible {
+public enum LoxError: Error, CustomStringConvertible {
   case runtime(line: Int, message: String)
   case syntax(line: Int, where: String, message: String)
   case fileError(message: String)
@@ -13,13 +13,13 @@ enum LoxError: Error, CustomStringConvertible {
     }
   }
 
-  var description: String {
+  public var description: String {
     switch self {
-    case .syntax(let line, let `where`, let message):
+    case let .syntax(line, `where`, message):
       return "[line \(line)] Error in \(`where`): \(message)"
-    case .runtime(let line, let message):
+    case let .runtime(line, message):
       return "[line \(line)] Runtime Error: \(message)"
-    case .fileError(let message):
+    case let .fileError(message):
       return "Error reading: \(message)"
     }
   }
