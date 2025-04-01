@@ -7,22 +7,22 @@ public enum Literal: Equatable, CustomStringConvertible {
 
   public var description: String {
     return switch self {
-    case .string(let value): "\"\(value)\""
-    case .number(let value):
+    case let .string(value): "\"\(value)\""
+    case let .number(value):
       // String representation as Int if possible
       if let anInt = Int(exactly: value) {
         String(anInt)
       } else {
         String(value)
       }
-    case .boolean(let value): value ? "true" : "false"
-    case .identifier(let value): value
+    case let .boolean(value): value ? "true" : "false"
+    case let .identifier(value): value
     case .nil: "nil"
     }
   }
 }
 
-public enum TokenType: CustomStringConvertible {
+public enum TokenType: Equatable, CustomStringConvertible {
   // Punctuation
   case leftParen, rightParen, leftBrace, rightBrace
   case comma, dot, semicolon
@@ -44,7 +44,7 @@ public enum TokenType: CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case .literal(let value): value.description
+    case let .literal(value): value.description
     case .leftParen: "("
     case .rightParen: ")"
     case .leftBrace: "{"
@@ -84,7 +84,7 @@ public enum TokenType: CustomStringConvertible {
   }
 }
 
-public struct Token: CustomStringConvertible {
+public struct Token: Equatable, CustomStringConvertible {
   public let type: TokenType
   public let line: Int
 
@@ -98,5 +98,9 @@ public struct Token: CustomStringConvertible {
     case .literal: type.description
     default: type.description.uppercased()
     }
+  }
+
+  public static func == (lhs: Token, rhs: Token) -> Bool {
+    lhs.line == rhs.line && lhs.type == rhs.type
   }
 }

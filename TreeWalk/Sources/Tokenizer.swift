@@ -32,6 +32,7 @@ public class Tokenizer {
 
   private func scan() throws(LoxError) {
     let char = advance()
+    guard !char.isNewline else { line += 1; return }
     guard !char.isWhitespace else { return }
 
     switch char {
@@ -46,7 +47,6 @@ public class Tokenizer {
     case "+": addToken(.plus)
     case ";": addToken(.semicolon)
     case "*": addToken(.star)
-    case "\n": line += 1
     case "\"": try handleString()
     // Possible two-character cases
     case "!", "=", "<", ">", "/":
