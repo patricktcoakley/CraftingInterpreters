@@ -24,3 +24,33 @@ public enum LoxError: Error, CustomStringConvertible {
     }
   }
 }
+
+public enum ParserError: Error, CustomStringConvertible {
+  case expected(message: String, token: Token)
+  case invalid(token: Token)
+
+  public var description: String {
+    switch self {
+    case let .expected(message, token):
+      return "\(message) with \(token)"
+
+    case let .invalid(token):
+      return "Invalid token: \(token)"
+    }
+  }
+}
+
+// TODO: Refactor into enum
+public struct RuntimeError: Error, CustomStringConvertible {
+  let token: Token
+  let message: String
+
+  init(_ token: Token, _ message: String) {
+    self.token = token
+    self.message = message
+  }
+
+  public var description: String {
+    "[line \(token.line)] Runtime Error: \(message)"
+  }
+}

@@ -9,12 +9,12 @@ import TreeWalk
   """
 
   let expectedTokens: [Token] = [
-    Token(type: .literal(.identifier("andy")), line: 1),
-    Token(type: .literal(.identifier("formless")), line: 1),
-    Token(type: .literal(.identifier("fo")), line: 1),
-    Token(type: .literal(.identifier("_ab_cd")), line: 1),
-    Token(type: .literal(.identifier("ab123")), line: 1),
-    Token(type: .literal(.identifier("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_")), line: 2),
+    Token(type: .identifier("andy"), line: 1),
+    Token(type: .identifier("formless"), line: 1),
+    Token(type: .identifier("fo"), line: 1),
+    Token(type: .identifier("_ab_cd"), line: 1),
+    Token(type: .identifier("ab123"), line: 1),
+    Token(type: .identifier("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_"), line: 2),
     Token(type: .eof, line: 3),
   ]
 
@@ -34,11 +34,11 @@ import TreeWalk
   """
 
   let expectedTokens: [Token] = [
-    Token(type: .literal(.number(123.0)), line: 1),
-    Token(type: .literal(.number(123.456)), line: 2),
+    Token(type: .number(123.0), line: 1),
+    Token(type: .number(123.456), line: 2),
     Token(type: .dot, line: 3),
-    Token(type: .literal(.number(456.0)), line: 3),
-    Token(type: .literal(.number(123.0)), line: 4),
+    Token(type: .number(456.0), line: 3),
+    Token(type: .number(123.0), line: 4),
     Token(type: .dot, line: 4),
     Token(type: .eof, line: 5),
   ]
@@ -57,8 +57,8 @@ import TreeWalk
   """
 
   let expectedTokens: [Token] = [
-    Token(type: .literal(.string("")), line: 1),
-    Token(type: .literal(.string("string")), line: 2),
+    Token(type: .string(""), line: 1),
+    Token(type: .string("string"), line: 2),
     Token(type: .eof, line: 3),
   ]
 
@@ -82,7 +82,7 @@ import TreeWalk
     Token(type: .for, line: 1),
     Token(type: .fun, line: 1),
     Token(type: .if, line: 1),
-    Token(type: .literal(.nil), line: 1),
+    Token(type: .nil, line: 1),
     Token(type: .or, line: 1),
     Token(type: .return, line: 1),
     Token(type: .super, line: 1),
@@ -145,10 +145,10 @@ import TreeWalk
   """
 
   let expectedTokens: [Token] = [
-    Token(type: .literal(.identifier("space")), line: 1),
-    Token(type: .literal(.identifier("tabs")), line: 1),
-    Token(type: .literal(.identifier("newlines")), line: 1),
-    Token(type: .literal(.identifier("end")), line: 6),
+    Token(type: .identifier("space"), line: 1),
+    Token(type: .identifier("tabs"), line: 1),
+    Token(type: .identifier("newlines"), line: 1),
+    Token(type: .identifier("end"), line: 6),
     Token(type: .eof, line: 7),
   ]
 

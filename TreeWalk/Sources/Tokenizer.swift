@@ -107,7 +107,7 @@ public class Tokenizer {
 
     let stringStartIndex = source.index(after: startIndex)
     let value = String(source[stringStartIndex ..< source.index(before: currentIndex)])
-    addToken(.literal(.string(value)))
+    addToken(.string(value))
   }
 
   private func handleNumber() throws(LoxError) {
@@ -126,7 +126,7 @@ public class Tokenizer {
       throw LoxError.syntax(line: line, where: "number", message: "Invalid number.")
     }
 
-    addToken(.literal(.number(num)))
+    addToken(.number(num))
   }
 
   private func handleKeywordOrIdentifier() throws(LoxError) {
@@ -142,7 +142,7 @@ public class Tokenizer {
     }
 
     // Fallback to identifier if keyword doesn't exist
-    let type = handleKeyword(text) ?? .literal(.identifier(text))
+    let type = handleKeyword(text) ?? .identifier(text)
 
     addToken(type)
   }
@@ -156,7 +156,7 @@ public class Tokenizer {
     case "for": .for
     case "fun": .fun
     case "if": .if
-    case "nil": .literal(.nil)
+    case "nil": .nil
     case "or": .or
     case "print": .print
     case "return": .return

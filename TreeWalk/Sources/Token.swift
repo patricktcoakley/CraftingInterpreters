@@ -1,28 +1,4 @@
-public enum Literal: Equatable, CustomStringConvertible {
-  case string(String)
-  case number(Float64)
-  case boolean(Bool)
-  case identifier(String)
-  case `nil`
-
-  public var description: String {
-    return switch self {
-    case let .string(value): "\"\(value)\""
-    case let .number(value):
-      // String representation as Int if possible
-      if let anInt = Int(exactly: value) {
-        String(anInt)
-      } else {
-        String(value)
-      }
-    case let .boolean(value): value ? "true" : "false"
-    case let .identifier(value): value
-    case .nil: "nil"
-    }
-  }
-}
-
-public enum TokenType: Equatable, CustomStringConvertible {
+public enum TokenType: Equatable, CustomStringConvertible, Sendable {
   // Punctuation
   case leftParen, rightParen, leftBrace, rightBrace
   case comma, dot, semicolon
@@ -33,7 +9,11 @@ public enum TokenType: Equatable, CustomStringConvertible {
   case greater, greaterEqual, less, lessEqual
 
   // Literal
-  case literal(Literal)
+  case string(String)
+  case number(Float64)
+  case boolean(Bool)
+  case identifier(String)
+  case `nil`
 
   // Keywords
   case and, `class`, `else`, `false`, fun, `for`, `if`
@@ -44,8 +24,17 @@ public enum TokenType: Equatable, CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case let .literal(value): value.description
-    case .leftParen: "("
+    case let .string(value): "\"\(value)\""
+    case let .number(value):
+      // String representation as Int if possible
+      if let anInt = Int(exactly: value) {
+        String(anInt)
+      } else {
+        String(value)
+      }
+    case let .boolean(value): value ? "true" : "false"
+    case let .identifier(value): value
+    case .nil: "nil" case .leftParen: "("
     case .rightParen: ")"
     case .leftBrace: "{"
     case .rightBrace: "}"
@@ -84,7 +73,7 @@ public enum TokenType: Equatable, CustomStringConvertible {
   }
 }
 
-public struct Token: Equatable, CustomStringConvertible {
+public struct Token: Equatable, CustomStringConvertible, Sendable {
   public let type: TokenType
   public let line: Int
 
@@ -95,7 +84,8 @@ public struct Token: Equatable, CustomStringConvertible {
 
   public var description: String {
     switch type {
-    case .literal: type.description
+    case .string, .number, .boolean, .identifier, .nil
+         : type.description
     default: type.description.uppercased()
     }
   }

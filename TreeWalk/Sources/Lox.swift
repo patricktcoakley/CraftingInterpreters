@@ -1,6 +1,8 @@
 import Foundation
 
 class Lox {
+  var interpreter = Interpreter()
+
   static func report(line: Int, where: String, message: String) throws {
     throw LoxError.syntax(line: line, where: `where`, message: message)
   }
@@ -18,8 +20,12 @@ class Lox {
   func run(_ input: String) throws(LoxError) {
     let tokenizer = Tokenizer(input)
     let tokens = try tokenizer.tokenize()
-    for token in tokens {
-      print("\(token.description)")
+    let parser = Parser(tokens: tokens)
+    do {
+      let statments = try parser.parse()
+      interpreter.interpret(statments)
+    } catch {
+      print(error.localizedDescription)
     }
   }
 }
